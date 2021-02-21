@@ -74,5 +74,75 @@ namespace CustomerNotification.API.Controllers
             }
         }
 
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
+        [Route("/userDelete")]
+        public async Task<IActionResult> DeleteUser([FromBody] UserModel request)
+        {
+            try
+            {
+                InitializeCorelation();
+
+                if (!ModelState.IsValid || request == null)
+                {
+                    return BadRequest();
+                }
+
+                var response = messageGenerator.MessageProcessor(request, MessageType.UserDeleted);
+
+                if (response.Length > 0)
+                {
+                    await _messagingService.SendMessageAsync(request.UserId, response);
+                    return StatusCode(StatusCodes.Status200OK, $"User id: {request.UserId} successfully deleted");
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status204NoContent, "Failed to delete user");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogError(MethodInfo.GetCurrentMethod().Name, $"Unhandled Exception occured. {ex.Message}", ex);
+                return HandleException(ex);
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
+        [Route("/userBLock")]
+        public async Task<IActionResult> BlockUser([FromBody] UserModel request)
+        {
+            try
+            {
+                InitializeCorelation();
+
+                if (!ModelState.IsValid || request == null)
+                {
+                    return BadRequest();
+                }
+
+                var response = messageGenerator.MessageProcessor(request, MessageType.UserAccessBlocked);
+
+                if (response.Length > 0)
+                {
+                    await _messagingService.SendMessageAsync(request.UserId, response);
+                    return StatusCode(StatusCodes.Status200OK, $"User id: {request.UserId} successfully blocked");
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status204NoContent, "Failed to block user");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogError(MethodInfo.GetCurrentMethod().Name, $"Unhandled Exception occured. {ex.Message}", ex);
+                return HandleException(ex);
+            }
+        }
+
     }
 }
