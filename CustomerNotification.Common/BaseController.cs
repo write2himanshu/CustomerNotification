@@ -80,34 +80,7 @@ namespace CustomerNotification.Common
 
 
         #region Logging Methods
-        /// <summary>
-        /// Log Information
-        /// </summary>
-        /// <param name="methodName">Name of the method where the context belongs to</param>
-        /// <param name="message">Message to be logged</param>
-        protected void LogInfo(string methodName, string message)
-        {
-            var loggerModel = new LoggingViewModel();
-
-            loggerModel.CorrelationId = _corelationId;
-            loggerModel.ApplicationName = this.GetType().Namespace;
-            loggerModel.ClassName = this.GetType().Name;
-            loggerModel.MethodName = methodName;
-            loggerModel.LogType = LogTypeClassificationEnum.INFO;
-            loggerModel.ErrorMessage = message;
-            loggerModel.Request = null;
-            loggerModel.Response = null;
-            loggerModel.Ex = null;
-
-            BaseService.PostLogMessage(loggerModel, _configuration["LoggingSection:LoggingServiceURL"]);
-
-            //Logger.Log(_corelationId, this.GetType().Namespace,
-            //    this.GetType().Name, methodName,
-            //    LogTypeEnum.INFO,
-            //    message, null, null, null, _loggedInUserID);
-
-        }
-
+        
         /// <summary>
         /// Log Error
         /// </summary>
@@ -128,35 +101,12 @@ namespace CustomerNotification.Common
             loggerModel.Response = null;
             loggerModel.Ex = ex;
 
-            BaseService.PostLogMessage(loggerModel, _configuration["LoggingSection:LoggingServiceURL"]);
-            //Logger.Log(_corelationId, this.GetType().Namespace,
-            //    this.GetType().Name, methodName,
-            //    LogTypeEnum.ERROR,
-            //    message, null, null, ex, _loggedInUserID);
-        }
-
-        /// <summary>
-        /// Log Warning
-        /// </summary>
-        /// <param name="methodName">Name of the method where the context belongs to</param>
-        /// <param name="message">Message to be logged</param>
-        protected void LogWarning(string methodName, string message)
-        {
-            var loggerModel = new LoggingViewModel();
-
-            loggerModel.CorrelationId = _corelationId;
-            loggerModel.ApplicationName = this.GetType().Namespace;
-            loggerModel.ClassName = this.GetType().Name;
-            loggerModel.MethodName = methodName;
-            loggerModel.LogType = LogTypeClassificationEnum.WARNING;
-            loggerModel.ErrorMessage = message;
-            loggerModel.Request = null;
-            loggerModel.Response = null;
-            loggerModel.Ex = null;
-
-            BaseService.PostLogMessage(loggerModel, _configuration["LoggingSection:LoggingServiceURL"]);
+            //BaseService.PostLogMessage(loggerModel, _configuration["LoggingSection:LoggingServiceURL"]);
+            BaseService.PostLogMessage(loggerModel);
 
         }
+
+       
 
         protected ObjectResult HandleException(Exception ex)
         {
