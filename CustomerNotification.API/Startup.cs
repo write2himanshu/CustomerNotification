@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CustomerNotificaton.Services;
+using CustomerNotificaton.Services.Implementation;
+using CustomerNotificaton.Services.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +29,12 @@ namespace CustomerNotification.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMvc();
+
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddScoped<IMessagingService, MessagingService>();
+            services.AddScoped<IMessageGenerator, MessageGenerator>();
 
         }
 

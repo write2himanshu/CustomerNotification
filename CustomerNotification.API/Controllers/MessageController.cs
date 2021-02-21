@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CustomerNotification.Common.Models;
+using CustomerNotificaton.Services.Interface;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Threading.Tasks;
 
 namespace CustomerNotification.API.Controllers
 {
@@ -6,5 +12,57 @@ namespace CustomerNotification.API.Controllers
     [Route("[controller]")]
     public class MessageController : ControllerBase
     {
-    } 
+        /// <summary>
+        /// The configuration
+        /// </summary>
+        private IConfiguration configuration;
+
+        /// <summary>
+        /// Messaging Service
+        /// </summary>
+        private IMessagingService _messagingService;
+
+        /// <summary>
+        /// Message generator
+        /// </summary>
+        private IMessageGenerator messageGenerator;
+
+
+        /// <param name="configuration"></param>
+        /// <param name="messagingService"></param>
+        public MessageController(IConfiguration configuration, IMessagingService messagingService, IMessageGenerator messageGenerator)
+        {
+            this.configuration = configuration;
+            _messagingService = messagingService;
+            this.messageGenerator = messageGenerator;
+        }
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
+        [Route("/userRegister")]
+        public async Task<IActionResult> RegisterUser([FromBody] UserModel request)
+        {
+
+            if (!ModelState.IsValid || request == null)
+            {
+                return BadRequest();
+            }
+
+
+            var response = messageGenerator.MessageProcessor(request, MessageType.NewUserRegistered);
+
+            if (response.Length > 0)
+            {
+                await _messagingService.SendMessageAsync(request.UserId, response);
+                return StatusCode(StatusCodes.Status200OK, $"User id: {request.UserId} successfully created");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status204NoContent, "User creation failed");
+            }
+
+        }
+
+    }
 }
