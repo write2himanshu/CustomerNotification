@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.OpenApi.Models;
 
 namespace CustomerNotification.API
 {
@@ -36,11 +38,17 @@ namespace CustomerNotification.API
             services.AddScoped<IMessagingService, MessagingService>();
             services.AddScoped<IMessageGenerator, MessageGenerator>();
 
+            services.AddMemoryCache();
+
+            ConfigureSwagger(services);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,6 +63,29 @@ namespace CustomerNotification.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "CUSTOMERNOTIFICATION API");
+            });
+        }
+
+        private void ConfigureSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen();
+            services.ConfigureSwaggerGen(options =>
+            {
+                options.OrderActionsBy((apiDesc) => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.RelativePath}");
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "CustomerNotification API",
+                    Description = "CustomerNotification API"
+                });
+                var app = PlatformServices.Default.Application;
+                var swaggerFile = System.IO.Path.Combine(app.ApplicationBasePath, @"CustomerNotification.API.xml");
+                options.IncludeXmlComments(swaggerFile);
             });
         }
     }

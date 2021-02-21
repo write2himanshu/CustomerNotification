@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 
 namespace CustomerNotification.API.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
+
     public class MessageController : BaseController
     {
         /// <summary>

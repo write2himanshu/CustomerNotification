@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CustomerNotification.API</name>
+    </assembly>
+    <members>
+        <member name="F:CustomerNotification.API.Controllers.MessageController.configuration">
+            <summary>
+            The configuration
+            </summary>
+        </member>
+        <member name="F:CustomerNotification.API.Controllers.MessageController._messagingService">
+            <summary>
+            Messaging Service
+            </summary>
+        </member>
+        <member name="F:CustomerNotification.API.Controllers.MessageController.messageGenerator">
+            <summary>
+            Message generator
+            </summary>
+        </member>
+        <member name="M:CustomerNotification.API.Controllers.MessageController.#ctor(Microsoft.Extensions.Configuration.IConfiguration,CustomerNotificaton.Services.Interface.IMessagingService,CustomerNotificaton.Services.Interface.IMessageGenerator)">
+            <param name="configuration"></param>
+            <param name="messagingService"></param>
+        </member>
+    </members>
+</doc>
