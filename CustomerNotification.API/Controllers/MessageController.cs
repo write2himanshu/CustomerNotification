@@ -1,16 +1,18 @@
-﻿using CustomerNotification.Common.Models;
+﻿using CustomerNotification.Common;
+using CustomerNotification.Common.Models;
 using CustomerNotificaton.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace CustomerNotification.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class MessageController : ControllerBase
+    public class MessageController : BaseController
     {
         /// <summary>
         /// The configuration
@@ -30,7 +32,7 @@ namespace CustomerNotification.API.Controllers
 
         /// <param name="configuration"></param>
         /// <param name="messagingService"></param>
-        public MessageController(IConfiguration configuration, IMessagingService messagingService, IMessageGenerator messageGenerator)
+        public MessageController(IConfiguration configuration, IMessagingService messagingService, IMessageGenerator messageGenerator) : base(configuration)
         {
             this.configuration = configuration;
             _messagingService = messagingService;
@@ -43,25 +45,34 @@ namespace CustomerNotification.API.Controllers
         [Route("/userRegister")]
         public async Task<IActionResult> RegisterUser([FromBody] UserModel request)
         {
-
-            if (!ModelState.IsValid || request == null)
+            try
             {
-                return BadRequest();
+                InitializeCorelation();
+
+                if (!ModelState.IsValid || request == null)
+                {
+                    return BadRequest();
+                }
+
+
+                var response = messageGenerator.MessageProcessor(request, MessageType.NewUserRegistered);
+
+                if (response.Length > 0)
+                {
+                    await _messagingService.SendMessageAsync(request.UserId, response);
+                    return StatusCode(StatusCodes.Status200OK, $"User id: {request.UserId} successfully created");
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status204NoContent, "User creation failed");
+                }
+
             }
-
-
-            var response = messageGenerator.MessageProcessor(request, MessageType.NewUserRegistered);
-
-            if (response.Length > 0)
+            catch (Exception ex)
             {
-                await _messagingService.SendMessageAsync(request.UserId, response);
-                return StatusCode(StatusCodes.Status200OK, $"User id: {request.UserId} successfully created");
+                LogError(MethodInfo.GetCurrentMethod().Name, $"Unhandled Exception occured. {ex.Message}", ex);
+                return HandleException(ex);
             }
-            else
-            {
-                return StatusCode(StatusCodes.Status204NoContent, "User creation failed");
-            }
-
         }
 
     }
