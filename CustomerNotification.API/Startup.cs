@@ -37,6 +37,8 @@ namespace CustomerNotification.API
 
             services.AddScoped<IMessagingService, MessagingService>();
             services.AddScoped<IMessageGenerator, MessageGenerator>();
+            services.AddScoped<IMessageFormatter, JSONMessageFormatter>();
+            services.AddScoped<IMessageFormatter, XMLMessageFormatter>();
 
             services.AddMemoryCache();
 

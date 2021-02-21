@@ -10,7 +10,27 @@ namespace CustomerNotificaton.Services.Implementation
     {
         public string MessageProcessor(UserModel userRequestInput, MessageType messageType)
         {
-            throw new NotImplementedException();
+            string message = string.Empty;
+
+            IMessageFormatter result = null;
+
+            switch (userRequestInput.ChannelRequestType)
+            {
+                case Channel.JSON:
+                    JSONMessageFormatter jFormat = new JSONMessageFormatter();
+                    result = jFormat;
+                    break;
+                case Channel.XML:
+                    XMLMessageFormatter xmlFormat = new XMLMessageFormatter();
+                    result = xmlFormat;
+                    break;
+                default:
+                    break;
+            }
+
+            message = result?.MessageTypeFormatter(userRequestInput);
+
+            return message;
         }
     }
 }
