@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CustomerNotificaton.Services.Interface;
+using System;
 using System.Threading.Tasks;
 
 namespace CustomerNotificaton.Services
 {
-    public class MessagingService
+    public class MessagingService : IMessagingService
     {
         public async Task SendMessageAsync(string customerId, string messageBody)
         {
