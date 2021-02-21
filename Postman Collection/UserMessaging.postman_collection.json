@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "f13d554d-216d-4888-b23d-cfa0c64789f2",
+		"name": "UserMessaging",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:61622/userRegister",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"9f9b1a81-2f94-44b7-994d-50cb60738f93\",\r\n    \"email\": \"user1@test.com\",\r\n    \"firstName\": \"user1First\",\r\n    \"lastName\": \"user1Last\",\r\n    \"channelRequestType\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:61622/userRegister",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "61622",
+					"path": [
+						"userRegister"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:61622/userDelete",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"9f9b1a81-2f94-44b7-994d-50cb60738f93\",\r\n    \"email\": \"user1@test.com\",\r\n    \"firstName\": \"user1First\",\r\n    \"lastName\": \"user1Last\",\r\n    \"channelRequestType\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:61622/userDelete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "61622",
+					"path": [
+						"userDelete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:61622/userBlock",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"9f9b1a81-2f94-44b7-994d-50cb60738f93\",\r\n    \"email\": \"user1@test.com\",\r\n    \"firstName\": \"user1First\",\r\n    \"lastName\": \"user1Last\",\r\n    \"channelRequestType\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:61622/userBlock",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "61622",
+					"path": [
+						"userBlock"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
